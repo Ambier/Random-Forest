@@ -17,7 +17,20 @@ void RandomForest::grow_forest(
   const unsigned int keys_per_node,
   const unsigned int tree_count )
 {
-  //
+  // If a forest exits, destroy it.
+  burn();
+
+  // Iteratively build each tree.
+  for ( unsigned int tree_index = 0; tree_index < tree_count; ++tree_index )
+  {
+    // Generate a bootstrap sample.
+    Dataset bootstrap = dataset.bootstrap_sample(bootstrap_size);
+
+    // Generate the random tree.
+    forest.push_back( RandomTree() );
+    forest[tree_index].grow_decision_tree(
+      bootstrap, split_keys, keys_per_node, decision_column );
+  }
 }
 
 //------------------------------------------------------------------------------
